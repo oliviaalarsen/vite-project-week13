@@ -15,5 +15,23 @@ export async function addGame(game: { title: string; img: string; description: s
 }
 
 export async function deleteGame(id: string) {
-  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  if (!id) {
+    console.error("Error: No ID provided for delete request.");
+    return;
+  }
+
+  console.log(`DELETE request for: http://localhost:3000/games/${id}`); // Debugging
+
+  const response = await fetch(`http://localhost:3000/games/${id}`, { method: "DELETE" });
+
+  if (response.status === 404) {
+    console.error(`Game with ID ${id} not found.`);
+    return;
+  }
+
+  if (response.ok) {
+    console.log(`Game with ID ${id} deleted successfully.`);
+  } else {
+    console.error(`Failed to delete game with ID ${id}. Status: ${response.status}`);
+  }
 }
